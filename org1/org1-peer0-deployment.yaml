@@ -24,6 +24,8 @@ spec:
             - node
             - start
           env:
+            - name: CORE_PEER_ADDRESSAUTODETECT
+              value: "true"
             - name: FABRIC_LOGGING_SPEC
               value: INFO
             - name: CORE_PEER_ADDRESS
@@ -31,7 +33,7 @@ spec:
             - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
               value: peer0-org1:7051
             - name: CORE_PEER_CHAINCODELISTENADDRESS
-              value: localhost:7052
+              value: 0.0.0.0:7052
             - name: CORE_PEER_GOSSIP_USELEADERELECTION
               value: "true"
             - name: CORE_PEER_GOSSIP_BOOTSTRAP
@@ -58,6 +60,8 @@ spec:
               value: prometheus
             - name: CORE_PEER_MSPCONFIGPATH
               value: /share/crypto-config/peerOrganizations/org1/peers/peer0-org1/msp
+            - name: CORE_VM_ENDPOINT
+              value: unix:///host/var/run/docker.sock
           image: hyperledger/fabric-peer:amd64-2.2.0
           name: peer0
           ports:
