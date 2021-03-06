@@ -43,19 +43,21 @@ spec:
             - name: CORE_PEER_PROFILE_ENABLED
               value: "true"
             - name: CORE_PEER_TLS_CERT_FILE
-              value: /etc/hyperledger/fabric/tls/server.crt
+              value: //share/crypto-config/peerOrganizations/org2/peers/peer0-org2/server.crt
             - name: CORE_PEER_TLS_ENABLED
               value: "true"
             - name: CORE_PEER_TLS_KEY_FILE
-              value: /etc/hyperledger/fabric/tls/server.key
+              value: //share/crypto-config/peerOrganizations/org2/peers/peer0-org2/server.key
             - name: CORE_PEER_TLS_ROOTCERT_FILE
-              value: /etc/hyperledger/fabric/tls/ca.crt
+              value: //share/crypto-config/peerOrganizations/org2/peers/peer0-org2/ca.crt
             - name: CORE_VM_ENDPOINT
               value: http://localhost:2375
             - name: CORE_OPERATIONS_LISTENADDRESS
               value: 0.0.0.0:9443
             - name: CORE_METRICS_PROVIDER
               value: prometheus
+            - name: CORE_PEER_MSPCONFIGPATH
+              value: /share/crypto-config/peerOrganizations/org2/peers/peer0-org2/msp
           image: hyperledger/fabric-peer:amd64-2.2.0
           name: peer0
           ports:
@@ -64,12 +66,10 @@ spec:
             - containerPort: 7053
             - containerPort: 9443
           volumeMounts:
-            - mountPath: /etc/hyperledger/fabric/msp
-              name: peer0-org2-claim1
-            - mountPath: /etc/hyperledger/fabric/tls
-              name: peer0-org2-claim2
             - mountPath: /var/hyperledger/production
               name: peer0-persistentdata
+            - mountPath: /share
+              name: share-persistentdata
             - mountPath: /etc/hyperledger/fabric/core.yaml
               name: builders-config
               subPath: core.yaml
@@ -84,18 +84,12 @@ spec:
               subPath: release
       restartPolicy: Always
       volumes:
-        - name: peer0-org2-claim1
-          hostPath:
-            path: /home/fabric-external-chaincodes/crypto-config/peerOrganizations/org2/peers/peer0-org2/msp
-            type: Directory
-        - name: peer0-org2-claim2
-          hostPath:
-            path: /home/fabric-external-chaincodes/crypto-config/peerOrganizations/org2/peers/peer0-org2/tls
-            type: Directory
         - name: peer0-persistentdata
-          hostPath:
-            path: /home/storage/peer0-org2
-            type: DirectoryOrCreate
+          persistentVolumeClaim:
+            claimName: org2-peer0-pvc
+        - name: share-persistentdata
+          persistentVolumeClaim:
+            claimName: share-pvc
         - name: builders-config
           configMap:
             name: builders-config

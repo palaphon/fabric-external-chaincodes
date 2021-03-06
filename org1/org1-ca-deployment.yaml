@@ -22,8 +22,8 @@ spec:
         - args:
             - sh
             - -c
-            - fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1-cert.pem
-              --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk
+            - fabric-ca-server start --ca.certfile /share/crypto-config/peerOrganizations/org1/ca/ca.org1-cert.pem
+              --ca.keyfile /share/crypto-config/peerOrganizations/org1/ca/priv_sk
               -b admin:adminpw -d
           env:
             - name: FABRIC_CA_HOME
@@ -31,22 +31,21 @@ spec:
             - name: FABRIC_CA_SERVER_CA_NAME
               value: ca-org1
             - name: FABRIC_CA_SERVER_TLS_CERTFILE
-              value: /etc/hyperledger/fabric-ca-server-config/ca.org1-cert.pem
+              value: /share/crypto-config/peerOrganizations/org1/ca/ca.org1-cert.pem
             - name: FABRIC_CA_SERVER_TLS_ENABLED
               value: "true"
             - name: FABRIC_CA_SERVER_TLS_KEYFILE
-              value: /etc/hyperledger/fabric-ca-server-config/priv_sk
+              value: /share/crypto-config/peerOrganizations/org1/ca/priv_sk
           image: hyperledger/fabric-ca:amd64-1.4.7
           name: ca-org1
           ports:
             - containerPort: 7054
           volumeMounts:
-            - mountPath: /etc/hyperledger/fabric-ca-server-config
-              name: ca-org1-claim0
+            - mountPath: /share
+              name: share-persistentdata
               readOnly: true
       restartPolicy: Always
       volumes:
-        - name: ca-org1-claim0
-          hostPath:
-            path: /home/fabric-external-chaincodes/crypto-config/peerOrganizations/org1/ca/
-            type: Directory
+        - name: share-persistentdata
+          persistentVolumeClaim:
+            claimName: share-pvc
