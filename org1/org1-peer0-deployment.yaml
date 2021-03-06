@@ -64,6 +64,8 @@ spec:
               value: unix:///host/var/run/docker.sock
             - name: CORE_CHAINCODE_BUILDER
               value: hyperledger/fabric-ccenv:2.2.2
+            - name: CORE_CHAINCODE_NODE_RUNTIME
+              value: hyperledger/fabric-nodeenv:2.2.2
           image: hyperledger/fabric-peer:amd64-2.2.0
           name: peer0
           ports:
