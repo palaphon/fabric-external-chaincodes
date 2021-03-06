@@ -46,11 +46,17 @@ spec:
           name: cli
           tty: true
           volumeMounts:
+            - mountPath: /host/var/run/
+              name: cli-claim0
             - mountPath: /share
               name: share-persistentdata
           workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
       restartPolicy: Always
       volumes:
+        - hostPath:
+            path: /var/run/
+            type: Directory
+          name: cli-claim0
         - name: share-persistentdata
           persistentVolumeClaim:
             claimName: share-pvc

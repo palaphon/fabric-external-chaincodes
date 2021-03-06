@@ -70,6 +70,8 @@ spec:
             - containerPort: 7053
             - containerPort: 9443
           volumeMounts:
+            - mountPath: /host/var/run/
+              name: cli-claim0
             - mountPath: /var/hyperledger/production
               name: peer0-persistentdata
             - mountPath: /share
@@ -88,6 +90,10 @@ spec:
               subPath: release
       restartPolicy: Always
       volumes:
+        - hostPath:
+            path: /var/run/
+            type: Directory
+          name: cli-claim0
         - name: peer0-persistentdata
           persistentVolumeClaim:
             claimName: org1-peer0-pvc
