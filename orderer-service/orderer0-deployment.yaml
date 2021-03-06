@@ -42,29 +42,29 @@ spec:
             - name: ORDERER_METRICS_PROVIDER
               value: prometheus
             - name: ORDERER_GENERAL_GENESISFILE
-              value: /var/hyperledger/orderer/genesis.block
+              value: /share/channel-artifacts/genesis.block
             - name: ORDERER_GENERAL_GENESISMETHOD
               value: file
             - name: ORDERER_GENERAL_LISTENADDRESS
               value: 0.0.0.0
             - name: ORDERER_GENERAL_LOCALMSPDIR
-              value: /var/hyperledger/orderer/msp
+              value: /share/crypto-config/ordererOrganizations/consortium/orderers/orderer0/msp
             - name: ORDERER_GENERAL_LOCALMSPID
               value: OrdererMSP
             - name: ORDERER_GENERAL_TLS_CERTIFICATE
-              value: /var/hyperledger/orderer/tls/server.crt
+              value: /share/crypto-config/ordererOrganizations/consortium/orderers/orderer0/tls/server.crt
             - name: ORDERER_GENERAL_TLS_ENABLED
               value: "true"
             - name: ORDERER_GENERAL_TLS_PRIVATEKEY
-              value: /var/hyperledger/orderer/tls/server.key
+              value: /share/crypto-config/ordererOrganizations/consortium/orderers/orderer0/tls/server.key
             - name: ORDERER_GENERAL_TLS_ROOTCAS
-              value: "[/var/hyperledger/orderer/tls/ca.crt]"
+              value: "[/share/crypto-config/ordererOrganizations/consortium/orderers/orderer0/tls/ca.crt]"
             - name: ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE
-              value: /var/hyperledger/orderer/tls/server.crt
+              value: /share/crypto-config/ordererOrganizations/consortium/orderers/orderer0/tls/server.crt
             - name: ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY
-              value: /var/hyperledger/orderer/tls/server.key
+              value: /share/crypto-config/ordererOrganizations/consortium/orderers/orderer0/tls/server.key
             - name: ORDERER_GENERAL_CLUSTER_ROOTCAS
-              value: "[/var/hyperledger/orderer/tls/ca.crt]"
+              value: "[/share/crypto-config/ordererOrganizations/consortium/orderers/orderer0/tls/ca.crt]"
           image: hyperledger/fabric-orderer:amd64-2.2.0
           name: orderer
           ports:
@@ -73,25 +73,14 @@ spec:
           volumeMounts:
             - mountPath: /var/hyperledger/production
               name: orderer-persistentdata
-            - mountPath: /var/hyperledger/orderer/genesis.block
-              name: orderer-claim0
-            - mountPath: /var/hyperledger/orderer/msp
-              name: orderer-claim1
-            - mountPath: /var/hyperledger/orderer/tls
-              name: orderer-claim2
+            - mountPath: /share
+              name: share-persistentdata
           workingDir: /opt/gopath/src/github.com/hyperledger/fabric
       restartPolicy: Always
       volumes:
         - name: orderer-persistentdata
-          hostPath:
-            path: /home/storage/orderer
-            type: DirectoryOrCreate
-        - name: orderer-claim0
-          hostPath:
-            path: /home/fabric-external-chaincodes/channel-artifacts/genesis.block
-        - name: orderer-claim1
-          hostPath:
-            path: /home/fabric-external-chaincodes/crypto-config/ordererOrganizations/consortium/orderers/orderer0/msp
-        - name: orderer-claim2
-          hostPath:
-            path: /home/fabric-external-chaincodes/crypto-config/ordererOrganizations/consortium/orderers/orderer0/tls
+          persistentVolumeClaim:
+            claimName: orderer0-pvc
+        - name: share-persistentdata
+          persistentVolumeClaim:
+            claimName: share-pvc
