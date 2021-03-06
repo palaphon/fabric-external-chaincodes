@@ -2,6 +2,8 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
+  labels:
+    name: share-pv
   name: share-pv
   namespace: hyperledger
 spec:
@@ -22,7 +24,11 @@ metadata:
 spec:
   accessModes:
   - ReadWriteMany
+  selector:
+    matchLabels:
+      name: "share-pv"
   resources:
     requests:
       storage: 1Gi
+  volumeMode: Filesystem
   volumeName: share-pv
