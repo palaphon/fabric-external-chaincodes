@@ -43,13 +43,13 @@ spec:
             - name: CORE_PEER_PROFILE_ENABLED
               value: "true"
             - name: CORE_PEER_TLS_CERT_FILE
-              value: //share/crypto-config/peerOrganizations/org2/peers/peer0-org2/tls/server.crt
+              value: /share/crypto-config/peerOrganizations/org2/peers/peer0-org2/tls/server.crt
             - name: CORE_PEER_TLS_ENABLED
               value: "true"
             - name: CORE_PEER_TLS_KEY_FILE
-              value: //share/crypto-config/peerOrganizations/org2/peers/peer0-org2/tls/server.key
+              value: /share/crypto-config/peerOrganizations/org2/peers/peer0-org2/tls/server.key
             - name: CORE_PEER_TLS_ROOTCERT_FILE
-              value: //share/crypto-config/peerOrganizations/org2/peers/peer0-org2/tls/ca.crt
+              value: /share/crypto-config/peerOrganizations/org2/peers/peer0-org2/tls/ca.crt
             - name: CORE_VM_ENDPOINT
               value: http://localhost:2375
             - name: CORE_OPERATIONS_LISTENADDRESS
